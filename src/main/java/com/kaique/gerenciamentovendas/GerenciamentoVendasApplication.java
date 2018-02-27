@@ -8,8 +8,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.kaique.gerenciamentovendas.model.Categoria;
+import com.kaique.gerenciamentovendas.model.Cidade;
+import com.kaique.gerenciamentovendas.model.Estado;
 import com.kaique.gerenciamentovendas.model.Produto;
 import com.kaique.gerenciamentovendas.repositorys.CategoriaRepository;
+import com.kaique.gerenciamentovendas.repositorys.CidadeRepository;
+import com.kaique.gerenciamentovendas.repositorys.EstadoRepository;
 import com.kaique.gerenciamentovendas.repositorys.ProdutoRepository;
 
 @SpringBootApplication
@@ -23,6 +27,10 @@ public class GerenciamentoVendasApplication implements CommandLineRunner{
 	private CategoriaRepository categorias;
 	@Autowired
 	private ProdutoRepository produtos;
+	@Autowired
+	private CidadeRepository cidadeRepository;
+	@Autowired
+	private EstadoRepository estadoRepository;
 
 	@Override
 	public void run(String... arg0) throws Exception {
@@ -43,5 +51,19 @@ public class GerenciamentoVendasApplication implements CommandLineRunner{
 		
 		this.categorias.save(Arrays.asList(cat1, cat2));
 		this.produtos.save(Arrays.asList(p1, p2, p3));
+		
+		Estado est1 = new Estado(null, 	"Minas Gerais");
+		Estado est2 = new Estado(null, "São Paulo");
+		
+		Cidade c1 = new Cidade(null, "Uberlândia", est1);
+		Cidade c2 = new Cidade(null, "São Paulo", est2);
+		Cidade c3 = new Cidade(null, "Campinas", est1);
+		
+		est1.getCidades().addAll(Arrays.asList(c1));
+		est2.getCidades().addAll(Arrays.asList(c2, c3));
+		
+		this.estadoRepository.save(Arrays.asList(est1, est2));
+		this.cidadeRepository.save(Arrays.asList(c1, c2, c3));
+		
 	}
 }
