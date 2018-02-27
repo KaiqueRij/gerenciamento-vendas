@@ -75,7 +75,7 @@ public class GerenciamentoVendasApplication implements CommandLineRunner{
 		this.cidadeRepository.save(Arrays.asList(c1, c2, c3));
 		
 		Cliente cli1 = new Cliente(null, "Maria Silva", "maria@gmail.com", "3333333", TipoCliente.PESSOAFISICA);
-		cli1.getTelefones().addAll(Arrays.asList("232323", "232323"));
+		cli1.getTelefones().addAll(Arrays.asList("232323", "242424"));
 		
 		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apto 303", "Jardim", "5544554", 
 				cli1, c1);
