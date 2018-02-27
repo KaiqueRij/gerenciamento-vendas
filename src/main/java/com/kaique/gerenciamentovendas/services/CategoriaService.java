@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.kaique.gerenciamentovendas.model.Categoria;
 import com.kaique.gerenciamentovendas.repositorys.CategoriaRepository;
+import com.kaique.gerenciamentovendas.services.exceptions.ObjetoNaoEncontradoException;
 
 @Service
 public class CategoriaService {
@@ -14,6 +15,11 @@ public class CategoriaService {
 	
 	public Categoria getCategoriaById(Integer id){
 		Categoria categoria = this.categorias.findOne(id);
+		
+		if(categoria == null){
+			throw new ObjetoNaoEncontradoException("Objeto não encontrado.");
+		}
+		
 		return categoria;
 	}
 
