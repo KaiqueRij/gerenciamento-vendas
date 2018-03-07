@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.kaique.gerenciamentovendas.model.Categoria;
 import com.kaique.gerenciamentovendas.repositorys.CategoriaRepository;
+import com.kaique.gerenciamentovendas.services.exceptions.IntegridadeDaInformacaoException;
 import com.kaique.gerenciamentovendas.services.exceptions.ObjetoNaoEncontradoException;
 
 @Service
@@ -31,6 +32,15 @@ public class CategoriaService {
 	public Categoria update(Categoria obj){
 		getCategoriaById(obj.getId());
 		return this.categoriaRepository.save(obj);		
+	}
+	
+	public void delete(Integer id){
+		getCategoriaById(id);
+		try {
+			this.categoriaRepository.delete(id);			
+		} catch (Exception e) {
+			throw new IntegridadeDaInformacaoException("Não é possível deletar categorias que possui produtos.");
+		}
 	}
 
 }
