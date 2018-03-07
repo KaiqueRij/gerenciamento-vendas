@@ -11,16 +11,21 @@ import com.kaique.gerenciamentovendas.services.exceptions.ObjetoNaoEncontradoExc
 public class CategoriaService {
 	
 	@Autowired
-	private CategoriaRepository categorias;
+	private CategoriaRepository categoriaRepository;
 	
 	public Categoria getCategoriaById(Integer id){
-		Categoria categoria = this.categorias.findOne(id);
+		Categoria categoria = this.categoriaRepository.findOne(id);
 		
 		if(categoria == null){
 			throw new ObjetoNaoEncontradoException("Objeto não encontrado.");
 		}
 		
 		return categoria;
+	}
+	
+	public Categoria insert(Categoria obj){
+		obj.setId(null);
+		return this.categoriaRepository.save(obj);
 	}
 
 }
