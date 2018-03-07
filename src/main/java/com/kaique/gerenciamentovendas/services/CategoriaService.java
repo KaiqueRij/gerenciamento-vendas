@@ -1,5 +1,7 @@
 package com.kaique.gerenciamentovendas.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,10 @@ public class CategoriaService {
 		}
 		
 		return categoria;
+	}
+	
+	public List<Categoria> findAll(){
+		return this.categoriaRepository.findAll();
 	}
 	
 	public Categoria insert(Categoria obj){
