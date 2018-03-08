@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import com.kaique.gerenciamentovendas.dtos.CategoriaDTO;
 import com.kaique.gerenciamentovendas.model.Categoria;
 import com.kaique.gerenciamentovendas.repositorys.CategoriaRepository;
 import com.kaique.gerenciamentovendas.services.exceptions.IntegridadeDaInformacaoException;
@@ -55,6 +56,10 @@ public class CategoriaService {
 	public Page<Categoria> findPage(Integer page, Integer linesPerPage, String orderBy, String direction){
 		PageRequest pageRequest = new PageRequest(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		return this.categoriaRepository.findAll(pageRequest);
+	}
+	
+	public Categoria fromDto(CategoriaDTO objDto){
+		return new Categoria(objDto.getId(), objDto.getNome());		
 	}
 
 }
