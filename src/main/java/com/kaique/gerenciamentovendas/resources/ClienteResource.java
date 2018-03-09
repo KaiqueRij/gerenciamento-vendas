@@ -1,5 +1,6 @@
 package com.kaique.gerenciamentovendas.resources;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,13 +12,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.kaique.gerenciamentovendas.dtos.ClienteDTO;
+import com.kaique.gerenciamentovendas.dtos.ClienteNewDTO;
 import com.kaique.gerenciamentovendas.model.Cliente;
 import com.kaique.gerenciamentovendas.services.ClienteService;
 
@@ -50,6 +54,14 @@ public class ClienteResource {
 		Page<Cliente> list = this.clienteService.findPage(page, linesPerPage, orderBy, direction);
 		Page<ClienteDTO> listDto = list.map(obj -> new ClienteDTO(obj));
 		return ResponseEntity.ok(listDto);
+	}
+	
+	@PostMapping
+	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO objDto){
+		Cliente obj = this.clienteService.fromDto(objDto);
+		obj = this.clienteService.insert(obj);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+		return ResponseEntity.created(uri).build();
 	}
 	
 	@PutMapping(value = "/{id}")
