@@ -22,6 +22,4 @@ public class PedidoResource {
 		Pedido pedido = this.pedidoService.getPedidoById(id);
 		return ResponseEntity.ok(pedido);
 	}
-	
-
 }
