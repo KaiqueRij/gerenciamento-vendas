@@ -6,12 +6,19 @@ import java.util.List;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.kaique.gerenciamentovendas.dtos.ClienteNewDTO;
+import com.kaique.gerenciamentovendas.model.Cliente;
 import com.kaique.gerenciamentovendas.model.enums.TipoCliente;
+import com.kaique.gerenciamentovendas.repositorys.ClienteRepository;
 import com.kaique.gerenciamentovendas.resources.exceptions.FieldMessage;
 import com.kaique.gerenciamentovendas.services.validation.utils.BR;
 
 public class ClienteInsertValidator implements ConstraintValidator<ClienteInsert, ClienteNewDTO> {
+	
+	@Autowired
+	private ClienteRepository clienteRepository;
 	
 	@Override
 	public void initialize(ClienteInsert constraintAnnotation) {
@@ -30,6 +37,11 @@ public class ClienteInsertValidator implements ConstraintValidator<ClienteInsert
 		if (value.getTipo().equals(TipoCliente.PESSOAJURIDICA.getCodigo())
 				&& !BR.isValidCNPJ(value.getCpfOuCnpj())) {
 			list.add(new FieldMessage("cpfOuCnpj", "CNPJ Inválido"));
+		}
+		
+		Cliente cliente = this.clienteRepository.findByEmail(value.getEmail());
+		if (cliente != null) {
+			list.add(new FieldMessage("email", "E-mail já existente"));
 		}
 		
 		for (FieldMessage e : list) {
