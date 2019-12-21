@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kaique.gerenciamentovendas.model.ItemPedido;
 import com.kaique.gerenciamentovendas.model.PagamentoComBoleto;
@@ -42,6 +43,7 @@ public class PedidoService {
 		return pedido;
 	}
 	
+	@Transactional
 	public Pedido insert (Pedido obj) {
 		obj.setId(null);
 		obj.setInstance(new Date());
@@ -58,7 +60,7 @@ public class PedidoService {
 		
 		for (ItemPedido ip : obj.getItens()) {
 			ip.setDesconto(0.0);
-			ip.setPreco(this.produtoService.getProdutoById(ip.getProduto().getId()).getPreco());
+			ip.setPreco(this.produtoService.find(ip.getProduto().getId()).getPreco());
 			ip.setPedido(obj);
 		}
 		

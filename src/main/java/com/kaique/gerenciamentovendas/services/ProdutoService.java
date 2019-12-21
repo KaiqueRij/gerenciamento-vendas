@@ -33,6 +33,16 @@ public class ProdutoService {
 		return pedido;
 	}
 	
+	public Produto find (Integer id) {
+		Produto pedido = this.produtoRepository.findOne(id);
+		
+		if(pedido == null){
+			throw new ObjetoNaoEncontradoException("Objeto não encontrado.");
+		}
+		
+		return pedido;
+	}
+	
 	public Page<Produto> search (String nome, List<Integer> ids, Integer page, Integer linesPerPage, String orderBy, String direction) {
 		PageRequest pageRequest = new PageRequest(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		List<Categoria> categorias = categoriaRepository.findAll(ids);
