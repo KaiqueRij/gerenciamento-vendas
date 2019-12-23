@@ -41,6 +41,16 @@ public class ClienteService {
 		return categoria;
 	}
 	
+	public Cliente find(Integer id){
+		Cliente categoria = this.clienteRepository.findOne(id);
+		
+		if(categoria == null){
+			throw new ObjetoNaoEncontradoException("Objeto não encontrado.");
+		}
+		
+		return categoria;
+	}
+	
 	public List<Cliente> findAll(){
 		return this.clienteRepository.findAll();
 	}
