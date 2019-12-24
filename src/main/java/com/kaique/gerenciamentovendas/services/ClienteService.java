@@ -14,10 +14,13 @@ import com.kaique.gerenciamentovendas.dtos.ClienteNewDTO;
 import com.kaique.gerenciamentovendas.model.Cidade;
 import com.kaique.gerenciamentovendas.model.Cliente;
 import com.kaique.gerenciamentovendas.model.Endereco;
+import com.kaique.gerenciamentovendas.model.enums.Perfil;
 import com.kaique.gerenciamentovendas.model.enums.TipoCliente;
 import com.kaique.gerenciamentovendas.repositorys.CidadeRepository;
 import com.kaique.gerenciamentovendas.repositorys.ClienteRepository;
 import com.kaique.gerenciamentovendas.repositorys.EnderecoRepository;
+import com.kaique.gerenciamentovendas.security.UserSS;
+import com.kaique.gerenciamentovendas.services.exceptions.AuthorizationException;
 import com.kaique.gerenciamentovendas.services.exceptions.IntegridadeDaInformacaoException;
 import com.kaique.gerenciamentovendas.services.exceptions.ObjetoNaoEncontradoException;
 
@@ -47,6 +50,13 @@ public class ClienteService {
 	}
 	
 	public Cliente find(Integer id){
+		
+		UserSS user = UserService.authenticated();
+		
+		if (user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		
 		Cliente categoria = this.clienteRepository.findOne(id);
 		
 		if(categoria == null){

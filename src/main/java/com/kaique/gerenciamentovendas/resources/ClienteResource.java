@@ -35,7 +35,7 @@ public class ClienteResource {
 	
 	@GetMapping(value = "{id}")
 	public ResponseEntity<?> getClienteById(@PathVariable Integer id){
-		Cliente cliente = this.clienteService.getClienteById(id);
+		Cliente cliente = this.clienteService.find(id);
 		return ResponseEntity.ok(cliente);
 	}
 	
