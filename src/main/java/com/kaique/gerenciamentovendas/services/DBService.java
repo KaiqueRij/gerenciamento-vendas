@@ -20,6 +20,7 @@ import com.kaique.gerenciamentovendas.model.PagamentoComCartao;
 import com.kaique.gerenciamentovendas.model.Pedido;
 import com.kaique.gerenciamentovendas.model.Produto;
 import com.kaique.gerenciamentovendas.model.enums.EstadoPagamento;
+import com.kaique.gerenciamentovendas.model.enums.Perfil;
 import com.kaique.gerenciamentovendas.model.enums.TipoCliente;
 import com.kaique.gerenciamentovendas.repositorys.CategoriaRepository;
 import com.kaique.gerenciamentovendas.repositorys.CidadeRepository;
@@ -115,18 +116,26 @@ public class DBService {
 		this.estadoRepository.save(Arrays.asList(est1, est2));
 		this.cidadeRepository.save(Arrays.asList(c1, c2, c3));
 		
-		Cliente cli1 = new Cliente(null, "Maria Silva", "kaiquerijkaardteste@gmail.com", "3333333", TipoCliente.PESSOAFISICA, pe.encode("123"));
+		Cliente cli1 = new Cliente(null, "Maria Silva", "kaiquerijkaardteste@gmail.com", "07450071045", TipoCliente.PESSOAFISICA, pe.encode("123"));
 		cli1.getTelefones().addAll(Arrays.asList("232323", "242424"));
+		
+		Cliente cli2 = new Cliente(null, "Ana Costa", "hanockrij@gmail.com", "29748415031", TipoCliente.PESSOAFISICA, pe.encode("123"));
+		cli2.getTelefones().addAll(Arrays.asList("98989898", "34313431"));
+		cli2.addPerfil(Perfil.ADMIN);
 		
 		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apto 303", "Jardim", "5544554", 
 				cli1, c1);
 		Endereco e2 = new Endereco(null, "Avenida Matos", "105", "Sala 800", "Centro", "3352232", 
 				cli1, c2);
 		
-		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+		Endereco e3 = new Endereco(null, "Avenida Floriano", "2106", null, "Centro", "587858254", 
+				cli2, c2);
 		
-		this.clienteRepository.save(Arrays.asList(cli1));
-		this.enderecoRepository.save(Arrays.asList(e1, e2));
+		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+		cli1.getEnderecos().addAll(Arrays.asList(e3));
+		
+		this.clienteRepository.save(Arrays.asList(cli1, cli2));
+		this.enderecoRepository.save(Arrays.asList(e1, e2, e3));
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
 		
