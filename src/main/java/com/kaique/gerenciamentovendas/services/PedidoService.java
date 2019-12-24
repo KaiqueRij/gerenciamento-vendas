@@ -3,9 +3,13 @@ package com.kaique.gerenciamentovendas.services;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.kaique.gerenciamentovendas.model.Cliente;
 import com.kaique.gerenciamentovendas.model.ItemPedido;
 import com.kaique.gerenciamentovendas.model.PagamentoComBoleto;
 import com.kaique.gerenciamentovendas.model.Pedido;
@@ -13,6 +17,8 @@ import com.kaique.gerenciamentovendas.model.enums.EstadoPagamento;
 import com.kaique.gerenciamentovendas.repositorys.ItemPedidoRepository;
 import com.kaique.gerenciamentovendas.repositorys.PagamentoRepository;
 import com.kaique.gerenciamentovendas.repositorys.PedidoRepository;
+import com.kaique.gerenciamentovendas.security.UserSS;
+import com.kaique.gerenciamentovendas.services.exceptions.AuthorizationException;
 import com.kaique.gerenciamentovendas.services.exceptions.ObjetoNaoEncontradoException;
 
 @Service
@@ -76,5 +82,18 @@ public class PedidoService {
 		this.emailService.sendOrderConfirmationHtmlEmail(obj);
 		
 		return obj;
+	}
+	
+	public Page<Pedido> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+		UserSS user = UserService.authenticated();
+		
+		if (user == null) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		
+		PageRequest pageRequest = new PageRequest(page, linesPerPage, Direction.valueOf(direction), orderBy);
+		Cliente cliente = this.clienteService.find(user.getId());
+		
+		return this.pedidoRepository.findByCliente(cliente, pageRequest);
 	}
 }
