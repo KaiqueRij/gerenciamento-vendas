@@ -4,6 +4,7 @@ import javax.mail.internet.MimeMessage;
 
 import org.springframework.mail.SimpleMailMessage;
 
+import com.kaique.gerenciamentovendas.model.Cliente;
 import com.kaique.gerenciamentovendas.model.Pedido;
 
 public interface EmailService {
@@ -12,4 +13,6 @@ public interface EmailService {
 	
 	void sendOrderConfirmationHtmlEmail(Pedido obj);
 	void sendHtmlEmail(MimeMessage msg);
+	
+	void sendNewPasswordEmail(Cliente cliente, String newPass);
 }
