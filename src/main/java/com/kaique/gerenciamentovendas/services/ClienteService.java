@@ -93,6 +93,22 @@ public class ClienteService {
 		return obj;
 	}
 	
+	public Cliente findByEmail (String email) {
+		
+		UserSS user = UserService.authenticated();
+		if (user == null || !user.hasRole(Perfil.ADMIN) && !email.equals(user.getUsername())) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		
+		Cliente obj = this.clienteRepository.findByEmail(email);
+		if (obj == null) {
+			throw new ObjetoNaoEncontradoException("Objeto não encontrado! Id: " + user.getId()
+				+ ", Tipo: " + Cliente.class.getName());
+		}
+		
+		return obj;
+	}
+	
 	public Cliente update(Cliente obj){
 		Cliente newObj = getClienteById(obj.getId());
 		updateData(newObj, obj);
@@ -149,4 +165,6 @@ public class ClienteService {
 		
 		return this.s3Service.uploadFile(this.imageService.getInputStream(jpgImage, "jpg"), fileName, "image");
 	}
+	
+	
 }
